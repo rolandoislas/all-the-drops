@@ -1,0 +1,16 @@
+[
+{
+  "modid": "allthedrops",
+  "name": "All the Drops",
+  "description": "Get all the mob drops with optional increased rates.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/rolandoislas/all-the-drops",
+  "updateUrl": "",
+  "authorList": ["rolandoislas"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

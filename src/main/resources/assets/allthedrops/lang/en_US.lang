@@ -1,0 +1,17 @@
+﻿allthedrops.config.general=General
+allthedrops.config.general.tooltip=Normal User Settings
+allthedrops.config.general.dropmultiplier=Drop Multiplier
+allthedrops.config.general.dropmultiplier.tooltip=Sets the amount to multiply drops\nSetting this to 1 effectively disables additional drops
+allthedrops.config.general.guaranteedrops=Guarantee Drops
+allthedrops.config.general.guaranteedrops.tooltip=If true, the drop rate for all mob and block drops becomes 100%
+allthedrops.config.general.requireplayerkill=Require Player Kill
+allthedrops.config.general.requireplayerkill.tooltip=If true, mob drops will only be modified if the mob is killed by a player
+allthedrops.config.general.commonblockdrops=Common Block Drops
+allthedrops.config.general.commonblockdrops.tooltip=If true, common blocks like dirt and stone will be multiplied
+
+allthedrops.config.baubles=Baubles
+
+allthedrops.config.advanced=Advanced
+allthedrops.config.advanced.tooltip=Advanced User Settings
+allthedrops.config.advanced.resourceblocks=Resource Blocks
+allthedrops.config.advanced.resourceblocks.tooltip=Forge OreDictionary names of blocks that will have their drops multiplied\nFor common blocks like dirt and stone enable "Common Block Drops"
