@@ -1,6 +1,7 @@
 package com.rolandoislas.allthedrops.proxy;
 
 import com.rolandoislas.allthedrops.event.EventHandlerClient;
+import com.rolandoislas.allthedrops.registry.ModItems;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -14,6 +15,7 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
 		MinecraftForge.EVENT_BUS.register(new EventHandlerClient());
+		ModItems.registerTextures();
 	}
 
 	@Override

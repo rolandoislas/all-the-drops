@@ -1,15 +1,19 @@
 package com.rolandoislas.allthedrops.event;
 
-import com.rolandoislas.allthedrops.AllTheDrops;
 import com.rolandoislas.allthedrops.data.Config;
-import net.minecraft.block.BlockCrops;
+import com.rolandoislas.allthedrops.registry.ModItems;
+import net.minecraft.block.BlockMelon;
+import net.minecraft.block.BlockNetherWart;
+import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Random;
 
 /**
  * Created by Rolando on 2/21/2017.
@@ -18,7 +22,7 @@ public class HarvestDropHandler {
 	private static final String[] resourceBlocks = new String[]{
 			"logWood",
 			"treeLeaves",
-			"vine",
+			"vine", // TODO vines are not dropping
 			"ore",
 			"crop",
 			"sugarcane",
@@ -51,22 +55,12 @@ public class HarvestDropHandler {
 				drop.setCount(drop.getCount() * Config.dropMultiplier);
 	}
 
-	private static boolean isResourceBlock(IBlockState state) {
-		ItemStack itemStack = new ItemStack(state.getBlock());
-		if (itemStack.getItem() == Items.AIR) {
-			if (state.getBlock() instanceof BlockRedstoneOre)
-				return true;
-			else if(state.getBlock() instanceof BlockCrops) {
-				BlockCrops crop = (BlockCrops) state.getBlock();
-				return crop.isMaxAge(state);
-			}
-			else if (state.getBlock() instanceof IPlantable)
-				return true;
-			AllTheDrops.logger.debug("Block Drop: Could not get itemstack for block: " +
-					state.getBlock().getUnlocalizedName());
-			AllTheDrops.logger.debug("Block Drop: Could not handle block based on instance: " +
-					state.getBlock().getClass().getCanonicalName());
-			return false;
+	public static boolean isResourceBlock(IBlockState state) {
+		ItemStack itemStack;
+		try {
+			itemStack = getItemStackFromState(state);
+		} catch (NoItemException e) {
+			itemStack = e.getDrop();
 		}
 		int[] ids = OreDictionary.getOreIDs(itemStack);
 		for (int id : ids) {
@@ -81,7 +75,44 @@ public class HarvestDropHandler {
 		return false;
 	}
 
+	public static ItemStack getItemStackFromState(IBlockState state) throws NoItemException {
+		// Get item from block
+		ItemStack itemStack = new ItemStack(state.getBlock());
+		// Block does not have an item
+		if (itemStack.getItem() == Items.AIR) {
+			// Redstone has odd states
+			if (state.getBlock() instanceof BlockRedstoneOre)
+				itemStack = new ItemStack(Blocks.REDSTONE_ORE);
+			// Netherwart
+			else if (state.getBlock() instanceof BlockNetherWart)
+				itemStack = new ItemStack(Items.NETHER_WART);
+			else if (state.getBlock() instanceof BlockMelon)
+				itemStack = new ItemStack(Items.MELON);
+			else if (state.getBlock() instanceof BlockPumpkin)
+				itemStack = new ItemStack(Blocks.PUMPKIN);
+			else {
+				ItemStack drop = state.getBlock().getItemDropped(state, new Random(),
+						Integer.MAX_VALUE).getDefaultInstance();
+				throw new NoItemException(drop);
+			}
+		}
+		return itemStack;
+	}
+
 	public static String[] getResourceBlocks() {
 		return resourceBlocks;
+	}
+
+	public static class NoItemException extends Exception {
+		private ItemStack drop;
+
+		public NoItemException(ItemStack drop) {
+			this.drop = drop;
+		}
+
+		public ItemStack getDrop() {
+			return (drop == null || drop.getItem() == Items.AIR)
+					? ModItems.DEV_TOOL.getDefaultInstance() : drop;
+		}
 	}
 }

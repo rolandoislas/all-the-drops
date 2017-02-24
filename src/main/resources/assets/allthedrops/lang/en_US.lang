@@ -15,3 +15,7 @@ allthedrops.config.advanced=Advanced
 allthedrops.config.advanced.tooltip=Advanced User Settings
 allthedrops.config.advanced.resourceblocks=Resource Blocks
 allthedrops.config.advanced.resourceblocks.tooltip=Forge OreDictionary names of blocks that will have their drops multiplied\nFor common blocks like dirt and stone enable "Common Block Drops"
+
+itemGroup.allthedrops=All the Drops
+
+item.allthedrops.devtool.name=Dev Tool
