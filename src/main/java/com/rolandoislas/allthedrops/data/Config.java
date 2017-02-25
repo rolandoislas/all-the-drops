@@ -73,7 +73,8 @@ public class Config {
 		ArrayList<IConfigElement> categories = new ArrayList<IConfigElement>();
 		categories.addAll(new ConfigElement(getConfig().getCategory(Configuration.CATEGORY_GENERAL))
 				.getChildElements());
-		categories.add(new ConfigElement(getConfig().getCategory(CATEGORY_BAUBLES)));
+		if (Loader.isModLoaded("baubles"))
+			categories.add(new ConfigElement(getConfig().getCategory(CATEGORY_BAUBLES)));
 		categories.add(new ConfigElement(getConfig().getCategory(CATEGORY_ADVANCED)));
 		return categories;
 	}
