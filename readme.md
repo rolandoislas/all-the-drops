@@ -3,6 +3,9 @@
 All the Drops
 ---
 
+Release: [![Build Status](https://travis-ci.org/rolandoislas/all-the-drops.svg?branch=master)](https://travis-ci.org/rolandoislas/all-the-drops)
+Dev: [![Build Status](https://travis-ci.org/rolandoislas/all-the-drops.svg?branch=develop)](https://travis-ci.org/rolandoislas/all-the-drops)
+
 All the Drops increases the mob and block drop rate in Minecraft.
 
 Are you tired of farming carrots? Do you wish zombies could be a reliable source of iron?
