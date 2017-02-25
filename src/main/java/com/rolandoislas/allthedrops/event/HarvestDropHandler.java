@@ -1,12 +1,13 @@
 package com.rolandoislas.allthedrops.event;
 
+import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
 import com.rolandoislas.allthedrops.data.Config;
+import com.rolandoislas.allthedrops.items.EnumShirt;
 import com.rolandoislas.allthedrops.registry.ModItems;
-import net.minecraft.block.BlockMelon;
-import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.BlockPumpkin;
-import net.minecraft.block.BlockRedstoneOre;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -43,19 +44,52 @@ public class HarvestDropHandler {
 	};
 
 	public static void harvestBlockDropEvent(BlockEvent.HarvestDropsEvent event) {
-		// All the Drops!
-		if (Config.guaranteeDrops) {
-			event.getDrops().clear();
-			event.getDrops().addAll(event.getState().getBlock()
-					.getDrops(event.getWorld(), event.getPos(), event.getState(), 3));
+		// Check for liquid
+		if (event.getState().getBlock() instanceof BlockLiquid)
+			return;
+		// Make sure the harvester is a player
+		if (event.getHarvester() == null || !(event.getHarvester() instanceof EntityPlayer))
+			return;
+		// Check baubles
+		boolean normalBlockDrops = true;
+		boolean commonBlockDrops = Config.commonBlockDrops;
+		if (Config.enableBaubles) {
+			normalBlockDrops = false;
+			commonBlockDrops = false;
+			IBaublesItemHandler handler = BaublesApi.getBaublesHandler(event.getHarvester());
+			boolean found = false;
+			for (int slot = 0; slot < handler.getSlots(); slot++) {
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_SHIRT, 1, EnumShirt.ALL.getMeta()))) {
+					found = true;
+					normalBlockDrops = true;
+				}
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_SHIRT, 1, EnumShirt.ALL_100.getMeta()))) {
+					found = true;
+					normalBlockDrops = true;
+				}
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_SHIRT, 1, EnumShirt.BLOCKS.getMeta()))) {
+					found = true;
+					normalBlockDrops = true;
+				}
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_CHARM, 1, 0))) {
+					found = true;
+					commonBlockDrops = Config.commonBlockDrops;
+				}
+			}
+			if (!found)
+				return;
 		}
 		// Multiply drops
-		if (isResourceBlock(event.getState()))
+		if (isResourceBlock(event.getState(), normalBlockDrops, commonBlockDrops))
 			for (ItemStack drop : event.getDrops())
 				drop.setCount(drop.getCount() * Config.dropMultiplier);
 	}
 
-	public static boolean isResourceBlock(IBlockState state) {
+	public static boolean isResourceBlock(IBlockState state, boolean normalBlockDrops, boolean commonBlockDrops) {
 		ItemStack itemStack;
 		try {
 			itemStack = getItemStackFromState(state);
@@ -64,10 +98,11 @@ public class HarvestDropHandler {
 		}
 		int[] ids = OreDictionary.getOreIDs(itemStack);
 		for (int id : ids) {
-			for (String dictName : Config.resourceBlocks)
-				if (OreDictionary.getOreName(id).contains(dictName))
-					return true;
-			if (Config.commonBlockDrops)
+			if (normalBlockDrops)
+				for (String dictName : Config.resourceBlocks)
+					if (OreDictionary.getOreName(id).contains(dictName))
+						return true;
+			if (commonBlockDrops)
 				for (String dictName : commonResourceBlocks)
 					if (OreDictionary.getOreName(id).contains(dictName))
 						return true;

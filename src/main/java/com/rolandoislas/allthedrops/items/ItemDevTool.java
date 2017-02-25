@@ -57,7 +57,8 @@ public class ItemDevTool extends Item {
 					blockClass = blockClass.getSuperclass();
 				}
 			}
-			sendMessage(p, "Resource Block: " + HarvestDropHandler.isResourceBlock(state));
+			sendMessage(p, "Resource Block: " +
+					HarvestDropHandler.isResourceBlock(state, true, true));
 			// Ore dict
 			sendMessage(p, "Ore Dictionary: " + (itemDropFallback ?
 					"<dropped item>" : ""));

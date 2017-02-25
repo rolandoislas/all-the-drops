@@ -1,7 +1,11 @@
 package com.rolandoislas.allthedrops.event;
 
+import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
 import com.rolandoislas.allthedrops.data.Config;
+import com.rolandoislas.allthedrops.items.EnumShirt;
+import com.rolandoislas.allthedrops.registry.ModItems;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -34,9 +38,36 @@ public class LivingDropHandler {
 		// Ignore if death was not caused by a player
 		if (Config.requirePlayerKill && !(event.getSource().getSourceOfDamage() instanceof EntityPlayer))
 			return;
+		// Check baubles
+		boolean guaranteeDrops = Config.guaranteeMobDrops;
+		if (Config.enableBaubles && event.getSource().getSourceOfDamage() instanceof EntityPlayer) {
+			IBaublesItemHandler handler = BaublesApi.getBaublesHandler(
+					(EntityPlayer) event.getSource().getSourceOfDamage());
+			boolean found = false;
+			for (int slot = 0; slot < handler.getSlots(); slot++) {
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_SHIRT, 1, EnumShirt.ALL.getMeta()))) {
+					found = true;
+					guaranteeDrops = false;
+				}
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_SHIRT, 1, EnumShirt.ALL_100.getMeta())))
+					found = true;
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_SHIRT, 1, EnumShirt.ENTITY.getMeta()))) {
+					found = true;
+					guaranteeDrops = false;
+				}
+				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
+						new ItemStack(ModItems.BAUBLE_SHIRT, 1, EnumShirt.ENTITY_100.getMeta())))
+					found = true;
+			}
+			if (!found)
+				return;
+		}
 		// All the Drops!
 		EntityLiving entity = (EntityLiving) event.getEntityLiving();
-		if (Config.guaranteeDrops) {
+		if (guaranteeDrops) {
 			// Try to get loot table from field
 			ResourceLocation resourcelocation = ReflectionHelper.getPrivateValue(EntityLiving.class, entity,
 					"deathLootTable");

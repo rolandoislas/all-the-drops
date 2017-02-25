@@ -40,6 +40,9 @@ if (ext.tag) {
             else
                 releaseType = "release"
             mainArtifact jar
+            relations {
+                optionalLibrary "baubles"
+            }
         }
     }
 }
@@ -51,7 +54,9 @@ compileJava {
 
 idea.module.inheritOutputDirs = true
 
-dependencies {}
+dependencies {
+    compile fileTree(dir: "lib", include: ["*.jar"])
+}
 
 processResources
 {
