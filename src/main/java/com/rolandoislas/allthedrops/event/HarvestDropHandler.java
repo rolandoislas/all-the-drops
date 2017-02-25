@@ -24,8 +24,8 @@ public class HarvestDropHandler {
 			"logWood",
 			"treeLeaves",
 			"vine", // TODO vines are not dropping
-			"ore",
-			"crop",
+			"ore*",
+			"crop*",
 			"sugarcane",
 			"blockCactus",
 			"obsidian",
@@ -100,14 +100,29 @@ public class HarvestDropHandler {
 		for (int id : ids) {
 			if (normalBlockDrops)
 				for (String dictName : Config.resourceBlocks)
-					if (OreDictionary.getOreName(id).contains(dictName))
+					if (isOreNameValid(OreDictionary.getOreName(id), dictName))
 						return true;
 			if (commonBlockDrops)
 				for (String dictName : commonResourceBlocks)
-					if (OreDictionary.getOreName(id).contains(dictName))
+					if (isOreNameValid(OreDictionary.getOreName(id), dictName))
 						return true;
 		}
 		return false;
+	}
+
+	private static boolean isOreNameValid(String oreName, String dictName) {
+		String dictNameStripped = dictName.replace("*", "");
+		// Match *something*
+		if (dictName.startsWith("*") && oreName.endsWith("*"))
+			return oreName.contains(dictNameStripped);
+		// Match *something
+		if (dictName.startsWith("*"))
+			return oreName.endsWith(dictNameStripped);
+		// Match something*
+		if (dictName.endsWith("*"))
+			return oreName.startsWith(dictNameStripped);
+		// Match "something"
+		return oreName.equals(dictNameStripped);
 	}
 
 	public static ItemStack getItemStackFromState(IBlockState state) throws NoItemException {
