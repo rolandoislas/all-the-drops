@@ -31,7 +31,7 @@ if (ext.tag) {
         apiKey = System.getenv("CURSE_API_KEY") ?: ""
         ext.tag = System.getenv("TRAVIS_TAG") ?: ""
         project {
-            id = "" // TODO
+            id = "261603"
             changelog = System.getenv("TRAVIS_COMMIT_MESSAGE") ?: ""
             if (ext.tag.contains("alpha"))
                 releaseType = "alpha"
