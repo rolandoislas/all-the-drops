@@ -3,6 +3,7 @@ package com.rolandoislas.allthedrops.items;
 import com.rolandoislas.allthedrops.AllTheDrops;
 import com.rolandoislas.allthedrops.event.HarvestDropHandler;
 import com.rolandoislas.allthedrops.registry.ModCreativeTabs;
+import com.rolandoislas.allthedrops.registry.ModItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,6 +60,14 @@ public class ItemDevTool extends Item {
 			}
 			sendMessage(p, "Resource Block: " +
 					HarvestDropHandler.isResourceBlock(state, true, true));
+			// Item
+			if (itemDropFallback) {
+				if (itemStack.getItem() != ModItems.DEV_TOOL)
+					sendMessage(p, "Item: " + itemStack.getDisplayName() + ", " +
+							itemStack.getUnlocalizedName() + ", " + itemStack.getClass().getName());
+				else
+					sendMessage(p, "Item: <none>");
+			}
 			// Ore dict
 			sendMessage(p, "Ore Dictionary: " + (itemDropFallback ?
 					"<dropped item>" : ""));

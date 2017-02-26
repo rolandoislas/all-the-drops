@@ -29,7 +29,8 @@ public class HarvestDropHandler {
 			"sugarcane",
 			"blockCactus",
 			"obsidian",
-			"glowstone"
+			"glowstone",
+			"blockClay"
 	};
 	private static final String[] commonResourceBlocks = new String[]{
 			"dirt",
@@ -127,7 +128,7 @@ public class HarvestDropHandler {
 
 	public static ItemStack getItemStackFromState(IBlockState state) throws NoItemException {
 		// Get item from block
-		ItemStack itemStack = new ItemStack(state.getBlock());
+		ItemStack itemStack = new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
 		// Block does not have an item
 		if (itemStack.getItem() == Items.AIR) {
 			// Redstone has odd states
@@ -136,10 +137,6 @@ public class HarvestDropHandler {
 			// Netherwart
 			else if (state.getBlock() instanceof BlockNetherWart)
 				itemStack = new ItemStack(Items.NETHER_WART);
-			else if (state.getBlock() instanceof BlockMelon)
-				itemStack = new ItemStack(Items.MELON);
-			else if (state.getBlock() instanceof BlockPumpkin)
-				itemStack = new ItemStack(Blocks.PUMPKIN);
 			else {
 				ItemStack drop = state.getBlock().getItemDropped(state, new Random(),
 						Integer.MAX_VALUE).getDefaultInstance();

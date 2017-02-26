@@ -3,6 +3,7 @@ package com.rolandoislas.allthedrops.proxy;
 import com.rolandoislas.allthedrops.data.Config;
 import com.rolandoislas.allthedrops.event.EventHandlerCommon;
 import com.rolandoislas.allthedrops.registry.ModItems;
+import com.rolandoislas.allthedrops.registry.Recipes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -24,6 +25,6 @@ public class CommonProxy {
 	}
 
 	public void postInit(FMLPostInitializationEvent event) {
-
+		Recipes.register();
 	}
 }
