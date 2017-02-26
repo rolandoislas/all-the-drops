@@ -3,6 +3,7 @@ package com.rolandoislas.allthedrops.event;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
+import com.rolandoislas.allthedrops.AllTheDrops;
 import com.rolandoislas.allthedrops.data.Config;
 import com.rolandoislas.allthedrops.items.EnumShirt;
 import com.rolandoislas.allthedrops.registry.ModItems;
@@ -24,11 +25,15 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 /**
  * Created by Rolando on 2/21/2017.
+ *
+ * Note: MCP Mapping Viewer for MCP to SRG names
+ *   http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-tools/1265548-mcp-mapping-viewer
  */
 public class LivingDropHandler {
 	public static void livingEntityDropEvent(LivingDropsEvent event) {
@@ -70,20 +75,24 @@ public class LivingDropHandler {
 		if (guaranteeDrops) {
 			// Try to get loot table from field
 			ResourceLocation resourcelocation = ReflectionHelper.getPrivateValue(EntityLiving.class, entity,
-					"deathLootTable");
+					"deathLootTable", "field_184659_bA");
 			// Try to get loot table from method call
-			if (resourcelocation == null)
-				try {
-					Method getLootTable = entity.getClass().getDeclaredMethod("getLootTable");
-					getLootTable.setAccessible(true);
-					resourcelocation = (ResourceLocation) getLootTable.invoke(entity);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
+			if (resourcelocation == null) {
+				for (String methodName : new String[]{"getLootTable", "func_184647_J"}) {
+					try {
+						Method getLootTable = entity.getClass().getDeclaredMethod(methodName);
+						getLootTable.setAccessible(true);
+						resourcelocation = (ResourceLocation) getLootTable.invoke(entity);
+						break;
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					} catch (NoSuchMethodException e) {
+						AllTheDrops.logger.debug(Arrays.toString(e.getStackTrace()));
+					}
 				}
+			}
 			// Populate drops
 			if (resourcelocation != null) {
 				event.getDrops().clear();
@@ -105,7 +114,7 @@ public class LivingDropHandler {
 
 	private static List<EntityItem> getAllDrops(LivingDropsEvent event, LootEntryTable lootEntryTable) {
 		ResourceLocation table = ReflectionHelper.getPrivateValue(LootEntryTable.class, lootEntryTable,
-				"table");
+				"table", "field_186371_a");
 		return getAllDrops(event, table);
 	}
 
@@ -114,13 +123,14 @@ public class LivingDropHandler {
 		EntityLivingBase entity = event.getEntityLiving();
 		LootTable lootTable = event.getEntityLiving().world.getLootTableManager()
 				.getLootTableFromLocation(resourceLocation);
-		List<LootPool> pools = ReflectionHelper.getPrivateValue(LootTable.class, lootTable, "pools");
+		List<LootPool> pools = ReflectionHelper.getPrivateValue(LootTable.class, lootTable, "pools",
+				"field_186466_c");
 		LootContext lootcontext = new LootContext.Builder((WorldServer)entity.world).withLootedEntity(entity)
 				.withDamageSource(event.getSource()).build();
 		// Add all loot from loot tables
 		for (LootPool pool : pools) {
 			List<LootEntry> lootEntries = ReflectionHelper.getPrivateValue(LootPool.class, pool,
-					"lootEntries");
+					"lootEntries", "field_186453_a");
 			for (LootEntry entry : lootEntries) {
 				if (!(entry instanceof LootEntryItem)) {
 					if (entry instanceof LootEntryTable)
@@ -128,9 +138,9 @@ public class LivingDropHandler {
 					continue;
 				}
 				Item item = ReflectionHelper.getPrivateValue(LootEntryItem.class, (LootEntryItem)entry,
-						"item");
+						"item", "field_186368_a");
 				LootFunction[] functions = ReflectionHelper.getPrivateValue(LootEntryItem.class,
-						(LootEntryItem)entry, "functions");
+						(LootEntryItem)entry, "functions", "field_186369_b");
 				ItemStack itemstack = new ItemStack(item);
 				// Apply loot functuions (damage, enchant, etc)
 				Random rand = new Random();
@@ -139,13 +149,13 @@ public class LivingDropHandler {
 						if (function instanceof SetCount) {
 							SetCount setCountFunction = (SetCount) function;
 							RandomValueRange countRange = ReflectionHelper.getPrivateValue(SetCount.class,
-									setCountFunction, "countRange");
+									setCountFunction, "countRange", "field_186568_a");
 							RandomValueRange maxCountRange = new RandomValueRange(countRange.getMax());
 							ReflectionHelper.setPrivateValue(SetCount.class, setCountFunction,
-									maxCountRange, "countRange");
+									maxCountRange, "countRange", "field_186568_a");
 							itemstack = setCountFunction.apply(itemstack, rand, lootcontext);
 							ReflectionHelper.setPrivateValue(SetCount.class, setCountFunction,
-									countRange, "countRange");
+									countRange, "countRange", "field_186568_a");
 						}
 						else
 							itemstack = function.apply(itemstack, rand, lootcontext);
