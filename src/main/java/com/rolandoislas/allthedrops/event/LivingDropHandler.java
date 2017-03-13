@@ -37,6 +37,9 @@ import java.util.Random;
  */
 public class LivingDropHandler {
 	public static void livingEntityDropEvent(LivingDropsEvent event) {
+		// Ignore player death/drops
+		if (event.getEntity() instanceof EntityPlayer)
+			return;
 		// Respect the mob loot gamerule
 		if (!event.getEntityLiving().world.getGameRules().getBoolean("doMobLoot"))
 			return;
