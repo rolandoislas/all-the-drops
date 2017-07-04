@@ -44,13 +44,13 @@ public class LivingDropHandler {
 		if (!event.getEntityLiving().world.getGameRules().getBoolean("doMobLoot"))
 			return;
 		// Ignore if death was not caused by a player
-		if (Config.requirePlayerKill && !(event.getSource().getSourceOfDamage() instanceof EntityPlayer))
+		if (Config.requirePlayerKill && !(event.getSource().getTrueSource() instanceof EntityPlayer))
 			return;
 		// Check baubles
 		boolean guaranteeDrops = Config.guaranteeMobDrops;
-		if (Config.enableBaubles && event.getSource().getSourceOfDamage() instanceof EntityPlayer) {
+		if (Config.enableBaubles && event.getSource().getTrueSource() instanceof EntityPlayer) {
 			IBaublesItemHandler handler = BaublesApi.getBaublesHandler(
-					(EntityPlayer) event.getSource().getSourceOfDamage());
+					(EntityPlayer) event.getSource().getTrueSource());
 			boolean found = false;
 			for (int slot = 0; slot < handler.getSlots(); slot++) {
 				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
@@ -111,8 +111,8 @@ public class LivingDropHandler {
 		ArrayList<ItemStack> equipment = Lists.newArrayList(entity.getEquipmentAndArmor());
 		// Multiply drops
 		for (EntityItem entityItem : event.getDrops())
-			if (!equipment.contains(entityItem.getEntityItem()))
-				entityItem.getEntityItem().setCount(entityItem.getEntityItem().getCount() * Config.dropMultiplier);
+			if (!equipment.contains(entityItem.getItem()))
+				entityItem.getItem().setCount(entityItem.getItem().getCount() * Config.dropMultiplier);
 	}
 
 	private static List<EntityItem> getAllDrops(LivingDropsEvent event, LootEntryTable lootEntryTable) {

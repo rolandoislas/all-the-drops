@@ -1,10 +1,13 @@
 package com.rolandoislas.allthedrops.registry;
 
+import com.rolandoislas.allthedrops.AllTheDrops;
 import com.rolandoislas.allthedrops.items.EnumShirt;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -26,16 +29,18 @@ public class Recipes {
 		OreDictionary.registerOre("cropMelon", Blocks.MELON_BLOCK);
 		OreDictionary.registerOre("blockClay", Blocks.CLAY);
 		// Shirt recipe
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModItems.BAUBLE_SHIRT, 1, 0),
-				"stick", "woolWhite", "dyeBlack"));
+		ResourceLocation name = new ResourceLocation(AllTheDrops.NAME);
+		ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(name, new ItemStack(ModItems.BAUBLE_SHIRT, 1, 0),
+				"stick", "woolWhite", "dyeBlack").setRegistryName("shirt"));
 		// Shirts conversion recipe
 		for (EnumShirt shirt : EnumShirt.values()) {
 			EnumShirt nextShirt = EnumShirt.getShirtFromMeta(shirt.getMeta() + 1);
-			GameRegistry.addShapelessRecipe(new ItemStack(ModItems.BAUBLE_SHIRT, 1, shirt.getMeta()),
-					new ItemStack(ModItems.BAUBLE_SHIRT, 1, nextShirt.getMeta()));
+			ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(name, new ItemStack(ModItems.BAUBLE_SHIRT, 1, shirt.getMeta()),
+					new ItemStack(ModItems.BAUBLE_SHIRT, 1, nextShirt.getMeta()))
+					.setRegistryName(String.format("shirt.%s", shirt.getUnlocalizedName())));
 		}
 		// Charm Recipe
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModItems.BAUBLE_CHARM, 1, 0),
-				"blockGlass", "stone"));
+		ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(name, new ItemStack(ModItems.BAUBLE_CHARM, 1, 0),
+				"blockGlass", "stone").setRegistryName("charm"));
 	}
 }

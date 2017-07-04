@@ -4,12 +4,15 @@ import baubles.api.IBauble;
 import baubles.api.render.IRenderBauble;
 import com.rolandoislas.allthedrops.AllTheDrops;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -28,7 +31,7 @@ abstract class ItemBauble extends Item implements IBauble, IRenderBauble {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		String prefix = getUnlocalizedName(stack);
 		tooltip.add(I18n.format(prefix + ".info.0"));
 		tooltip.add(I18n.format(prefix + ".info.1"));
