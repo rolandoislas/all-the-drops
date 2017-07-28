@@ -41,7 +41,7 @@ public class LivingDropHandler {
 		if (event.getEntity() instanceof EntityPlayer)
 			return;
 		// Respect the mob loot gamerule
-		if (!event.getEntityLiving().world.getGameRules().getBoolean("doMobLoot"))
+		if (!event.getEntityLiving().worldObj.getGameRules().getBoolean("doMobLoot"))
 			return;
 		// Ignore if death was not caused by a player
 		if (Config.requirePlayerKill && !(event.getSource().getSourceOfDamage() instanceof EntityPlayer))
@@ -103,7 +103,7 @@ public class LivingDropHandler {
 				event.getDrops().addAll(getAllDrops(event, resourcelocation));
 				// Add Equipment
 				for (ItemStack itemStack : entity.getEquipmentAndArmor())
-					event.getDrops().add(new EntityItem(entity.world, entity.getPosition().getX(),
+					event.getDrops().add(new EntityItem(entity.worldObj, entity.getPosition().getX(),
 							entity.getPosition().getY(), entity.getPosition().getZ(),
 							itemStack));
 			}
@@ -112,7 +112,7 @@ public class LivingDropHandler {
 		// Multiply drops
 		for (EntityItem entityItem : event.getDrops())
 			if (!equipment.contains(entityItem.getEntityItem()))
-				entityItem.getEntityItem().setCount(entityItem.getEntityItem().getCount() * Config.dropMultiplier);
+				entityItem.getEntityItem().stackSize *= Config.dropMultiplier;
 	}
 
 	private static List<EntityItem> getAllDrops(LivingDropsEvent event, LootEntryTable lootEntryTable) {
@@ -124,11 +124,11 @@ public class LivingDropHandler {
 	private static List<EntityItem> getAllDrops(LivingDropsEvent event, ResourceLocation resourceLocation) {
 		List<EntityItem> drops = new ArrayList<EntityItem>();
 		EntityLivingBase entity = event.getEntityLiving();
-		LootTable lootTable = event.getEntityLiving().world.getLootTableManager()
+		LootTable lootTable = event.getEntityLiving().worldObj.getLootTableManager()
 				.getLootTableFromLocation(resourceLocation);
 		List<LootPool> pools = ReflectionHelper.getPrivateValue(LootTable.class, lootTable, "pools",
 				"field_186466_c");
-		LootContext lootcontext = new LootContext.Builder((WorldServer)entity.world).withLootedEntity(entity)
+		LootContext lootcontext = new LootContext.Builder((WorldServer)entity.worldObj).withLootedEntity(entity)
 				.withDamageSource(event.getSource()).build();
 		// Add all loot from loot tables
 		for (LootPool pool : pools) {
@@ -163,7 +163,7 @@ public class LivingDropHandler {
 						else
 							itemstack = function.apply(itemstack, rand, lootcontext);
 				}
-				EntityItem entityItem = new EntityItem(entity.world, entity.getPosition().getX(),
+				EntityItem entityItem = new EntityItem(entity.worldObj, entity.getPosition().getX(),
 						entity.getPosition().getY(), entity.getPosition().getZ(), itemstack);
 				entityItem.setPickupDelay(10);
 				drops.add(entityItem);

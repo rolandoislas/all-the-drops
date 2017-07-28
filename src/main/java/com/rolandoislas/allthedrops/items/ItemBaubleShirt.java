@@ -11,7 +11,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+
+import java.util.List;
 
 /**
  * Created by Rolando on 2/23/2017.
@@ -30,7 +31,7 @@ public class ItemBaubleShirt extends ItemBauble {
 	}
 
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
 		for (EnumShirt shirt : EnumShirt.values())
 			subItems.add(new ItemStack(ModItems.BAUBLE_SHIRT, 1, shirt.getMeta()));
 	}

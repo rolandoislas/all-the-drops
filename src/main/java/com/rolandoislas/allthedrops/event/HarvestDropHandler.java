@@ -87,7 +87,7 @@ public class HarvestDropHandler {
 		// Multiply drops
 		if (isResourceBlock(event.getState(), normalBlockDrops, commonBlockDrops))
 			for (ItemStack drop : event.getDrops())
-				drop.setCount(drop.getCount() * Config.dropMultiplier);
+				drop.stackSize *= Config.dropMultiplier;
 	}
 
 	public static boolean isResourceBlock(IBlockState state, boolean normalBlockDrops, boolean commonBlockDrops) {
@@ -130,7 +130,7 @@ public class HarvestDropHandler {
 		// Get item from block
 		ItemStack itemStack = new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
 		// Block does not have an item
-		if (itemStack.getItem() == Items.AIR) {
+		if (itemStack.getItem() == null) {
 			// Redstone has odd states
 			if (state.getBlock() instanceof BlockRedstoneOre)
 				itemStack = new ItemStack(Blocks.REDSTONE_ORE);
@@ -138,8 +138,8 @@ public class HarvestDropHandler {
 			else if (state.getBlock() instanceof BlockNetherWart)
 				itemStack = new ItemStack(Items.NETHER_WART);
 			else {
-				ItemStack drop = state.getBlock().getItemDropped(state, new Random(),
-						Integer.MAX_VALUE).getDefaultInstance();
+				ItemStack drop = new ItemStack(state.getBlock().getItemDropped(state, new Random(),
+						Integer.MAX_VALUE));
 				throw new NoItemException(drop);
 			}
 		}
@@ -158,8 +158,7 @@ public class HarvestDropHandler {
 		}
 
 		public ItemStack getDrop() {
-			return (drop == null || drop.getItem() == Items.AIR)
-					? ModItems.DEV_TOOL.getDefaultInstance() : drop;
+			return drop == null ? new ItemStack(ModItems.DEV_TOOL) : drop;
 		}
 	}
 }

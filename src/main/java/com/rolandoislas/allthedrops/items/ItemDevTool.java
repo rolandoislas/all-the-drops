@@ -33,8 +33,8 @@ public class ItemDevTool extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-									  EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos,
+									  EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (worldIn.isRemote) {
 			EntityPlayerSP p = (EntityPlayerSP)player;
 			IBlockState state = worldIn.getBlockState(pos);
@@ -86,6 +86,6 @@ public class ItemDevTool extends Item {
 
 	private void sendMessage(EntityPlayerSP player, String message, boolean tab) {
 		String prefix = MESSAGE_PREFIX + (tab ? "  " : "");
-		player.sendMessage(new TextComponentString(prefix + message));
+		player.addChatMessage(new TextComponentString(prefix + message));
 	}
 }
