@@ -47,7 +47,7 @@ public class Config {
 		// Baubles
 		config.setCategoryLanguageKey(CATEGORY_BAUBLES, BASE_LANG + "baubles");
 		config.setCategoryRequiresMcRestart(CATEGORY_BAUBLES, true);
-		enableBaubles = Loader.isModLoaded("baubles") &&
+		enableBaubles = Loader.isModLoaded("Baubles") &&
 				config.getBoolean("enable", CATEGORY_BAUBLES, true, "",
 						BASE_LANG + "baubles.enable");
 		// Advanced
