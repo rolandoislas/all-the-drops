@@ -8,6 +8,7 @@ import com.rolandoislas.allthedrops.items.ItemDevTool;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -29,10 +30,10 @@ public class ModItems {
 	}
 
 	public static void register() {
-		GameRegistry.register(DEV_TOOL);
+		ForgeRegistries.ITEMS.register(DEV_TOOL);
 		if (Config.enableBaubles) {
-			GameRegistry.register(BAUBLE_SHIRT);
-			GameRegistry.register(BAUBLE_CHARM);
+			ForgeRegistries.ITEMS.register(BAUBLE_SHIRT);
+			ForgeRegistries.ITEMS.register(BAUBLE_CHARM);
 		}
 	}
 }

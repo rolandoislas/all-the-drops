@@ -30,7 +30,7 @@ public class ItemBaubleShirt extends ItemBauble {
 	}
 
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (EnumShirt shirt : EnumShirt.values())
 			subItems.add(new ItemStack(ModItems.BAUBLE_SHIRT, 1, shirt.getMeta()));
 	}
@@ -55,10 +55,10 @@ public class ItemBaubleShirt extends ItemBauble {
 		float scale = 1f / 16f;
 		GlStateManager.scale(scale, scale, scale);
 		GlStateManager.enableAlpha();
-		model.setRotationAngles(entityPlayer.limbSwing, entityPlayer.limbSwingAmount, entityPlayer.getAge(),
+		model.setRotationAngles(entityPlayer.limbSwing, entityPlayer.limbSwingAmount, entityPlayer.ticksExisted,
 				entityPlayer.cameraYaw, entityPlayer.cameraPitch, 1, entityPlayer);
 		model.setLivingAnimations(entityPlayer, entityPlayer.limbSwing, entityPlayer.limbSwingAmount,
-				entityPlayer.getAge());
+				entityPlayer.ticksExisted);
 		model.bipedBody.render(1);
 		model.bipedLeftArm.render(1);
 		model.bipedRightArm.render(1);

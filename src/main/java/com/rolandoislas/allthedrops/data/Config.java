@@ -19,6 +19,7 @@ public class Config {
 	private static final String CATEGORY_ADVANCED = "advanced";
 	private static final String CATEGORY_BAUBLES = "baubles";
 	private static final String BASE_LANG = MODID + ".config.";
+	public static final String BAUBLES_MODID = "baubles";
 	private static Configuration config;
 	public static int dropMultiplier;
 	public static boolean guaranteeMobDrops;
@@ -42,12 +43,12 @@ public class Config {
 		requirePlayerKill = config.getBoolean("requireplayerkill", Configuration.CATEGORY_GENERAL, true,
 				"", BASE_LANG + "general.requireplayerkill");
 		commonBlockDrops = config.getBoolean("commonblockdrops", Configuration.CATEGORY_GENERAL,
-				Loader.isModLoaded("baubles"),
+				Loader.isModLoaded(BAUBLES_MODID),
 				"", BASE_LANG + "general.commonblockdrops");
 		// Baubles
 		config.setCategoryLanguageKey(CATEGORY_BAUBLES, BASE_LANG + "baubles");
 		config.setCategoryRequiresMcRestart(CATEGORY_BAUBLES, true);
-		enableBaubles = Loader.isModLoaded("baubles") &&
+		enableBaubles = Loader.isModLoaded(BAUBLES_MODID) &&
 				config.getBoolean("enable", CATEGORY_BAUBLES, true, "",
 						BASE_LANG + "baubles.enable");
 		// Advanced
@@ -73,7 +74,7 @@ public class Config {
 		ArrayList<IConfigElement> categories = new ArrayList<IConfigElement>();
 		categories.addAll(new ConfigElement(getConfig().getCategory(Configuration.CATEGORY_GENERAL))
 				.getChildElements());
-		if (Loader.isModLoaded("baubles"))
+		if (Loader.isModLoaded(BAUBLES_MODID))
 			categories.add(new ConfigElement(getConfig().getCategory(CATEGORY_BAUBLES)));
 		categories.add(new ConfigElement(getConfig().getCategory(CATEGORY_ADVANCED)));
 		return categories;
