@@ -3,6 +3,7 @@ package com.rolandoislas.allthedrops.items;
 import baubles.api.IBauble;
 import baubles.api.render.IRenderBauble;
 import com.rolandoislas.allthedrops.AllTheDrops;
+import com.rolandoislas.allthedrops.data.Config;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,8 +20,8 @@ import java.util.List;
  * Created by Rolando on 2/23/2017.
  */
 @Optional.InterfaceList({
-		@Optional.Interface(modid = "baubles", iface = "baubles.api.IBauble"),
-		@Optional.Interface(modid = "baubles", iface = "baubles.api.render.IRenderBauble")
+		@Optional.Interface(modid = Config.BAUBLES_MODID, iface = "baubles.api.IBauble"),
+		@Optional.Interface(modid = Config.BAUBLES_MODID, iface = "baubles.api.render.IRenderBauble")
 })
 abstract class ItemBauble extends Item implements IBauble, IRenderBauble {
 	private ResourceLocation modelTexture;
