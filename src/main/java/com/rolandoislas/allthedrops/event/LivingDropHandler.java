@@ -44,13 +44,13 @@ public class LivingDropHandler {
 		if (!event.getEntityLiving().world.getGameRules().getBoolean("doMobLoot"))
 			return;
 		// Ignore if death was not caused by a player
-		if (Config.requirePlayerKill && !(event.getSource().getSourceOfDamage() instanceof EntityPlayer))
+		if (Config.requirePlayerKill && !(event.getSource().getEntity() instanceof EntityPlayer))
 			return;
 		// Check baubles
 		boolean guaranteeDrops = Config.guaranteeMobDrops;
-		if (Config.enableBaubles && event.getSource().getSourceOfDamage() instanceof EntityPlayer) {
+		if (Config.enableBaubles && event.getSource().getEntity() instanceof EntityPlayer) {
 			IBaublesItemHandler handler = BaublesApi.getBaublesHandler(
-					(EntityPlayer) event.getSource().getSourceOfDamage());
+					(EntityPlayer) event.getSource().getEntity());
 			boolean found = false;
 			for (int slot = 0; slot < handler.getSlots(); slot++) {
 				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
