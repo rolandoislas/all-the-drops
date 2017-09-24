@@ -44,13 +44,13 @@ public class LivingDropHandler {
 		if (!event.getEntityLiving().worldObj.getGameRules().getBoolean("doMobLoot"))
 			return;
 		// Ignore if death was not caused by a player
-		if (Config.requirePlayerKill && !(event.getSource().getSourceOfDamage() instanceof EntityPlayer))
+		if (Config.requirePlayerKill && !(event.getSource().getEntity() instanceof EntityPlayer))
 			return;
 		// Check baubles
 		boolean guaranteeDrops = Config.guaranteeMobDrops;
-		if (Config.enableBaubles && event.getSource().getSourceOfDamage() instanceof EntityPlayer) {
+		if (Config.enableBaubles && event.getSource().getEntity() instanceof EntityPlayer) {
 			IBaublesItemHandler handler = BaublesApi.getBaublesHandler(
-					(EntityPlayer) event.getSource().getSourceOfDamage());
+					(EntityPlayer) event.getSource().getEntity());
 			boolean found = false;
 			for (int slot = 0; slot < handler.getSlots(); slot++) {
 				if (ItemStack.areItemsEqual(handler.getStackInSlot(slot),
@@ -103,9 +103,10 @@ public class LivingDropHandler {
 				event.getDrops().addAll(getAllDrops(event, resourcelocation));
 				// Add Equipment
 				for (ItemStack itemStack : entity.getEquipmentAndArmor())
-					event.getDrops().add(new EntityItem(entity.worldObj, entity.getPosition().getX(),
-							entity.getPosition().getY(), entity.getPosition().getZ(),
-							itemStack));
+					if (itemStack != null)
+						event.getDrops().add(new EntityItem(entity.worldObj, entity.getPosition().getX(),
+								entity.getPosition().getY(), entity.getPosition().getZ(),
+								itemStack));
 			}
 		}
 		ArrayList<ItemStack> equipment = Lists.newArrayList(entity.getEquipmentAndArmor());
