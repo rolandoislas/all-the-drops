@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
         guiFactory = "com.rolandoislas.allthedrops.gui.GuiFactory")
 public class AllTheDrops {
     public static final String MODID = "allthedrops";
-    public static final String VERSION = "1.0.1";
+    public static final String VERSION = "1.0.2";
     public static final String NAME = "All the Drops";
     @Mod.Instance(MODID)
     public static AllTheDrops instance;

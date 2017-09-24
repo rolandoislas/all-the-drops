@@ -15,13 +15,13 @@ apply plugin: "com.matthewprenger.cursegradle"
 
 ext.build = System.getenv('TRAVIS_BUILD_NUMBER')
 ext.tag = System.getenv("TRAVIS_TAG")
-version = "1.11.2-1.0.1"
+version = "1.12-1.0.1"
 version =  version + "-build-T" + ext.build
 group= "com.rolandoislas.allthedrops" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allthedrops"
 
 minecraft {
-    version = "1.12-14.21.1.2387"
+    version = "1.12.2-14.23.0.2491"
     runDir = "run"
     mappings = "snapshot_20170626"
 }
